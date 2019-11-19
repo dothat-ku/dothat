@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<img id="ssr" src="pgnnet.png" width="200">
+<label>Demo: </label>
+<div id="demo"></div>
+<script type="text/javascript">
+function _(e) {
+	return document.getElementById(e);
+}
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+function getBase64Image(img) {
+    // Create an empty canvas element
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Copy the image contents to the canvas
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    // Get the data-URL formatted image
+    // Firefox supports PNG and JPEG. You could check img.src to
+    // guess the original format, but be aware the using "image/jpg"
+    // will re-encode the image.
+    var dataURL = canvas.toDataURL("image/png");
+
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+}
+
+var builder = new BlobBuilder();
+var fileParts = ['<a id="a"><b id="b">hey!</b></a>'];
+builder.append(fileParts[0]);
+var myBlob = builder.getBlob('text/xml');
+_('demo').innerHTML = myBlob;
+</script>
+</body>
+</html>
