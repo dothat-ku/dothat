@@ -18,12 +18,12 @@ dothat team project at KU (COSE451)
 -----
 -----
 ----
-##Requirement
+## Requirement
 - Nginx
 - PHP
 - Postgresql
 
-##Operating Systems
+## Operating Systems
 - Linux Ubuntu (recommended)
 
 ## Installitions
@@ -35,7 +35,7 @@ $ sudo apt-get update
 ```
 
 ----
-#Installing Nginx
+# Installing Nginx
 ```bash
 $ sudo apt-get install nginx-full
 ```
@@ -44,7 +44,7 @@ $ sudo apt-get install nginx-full
 ```bash
 $ sudo service nginx start | restart | reload | stop | status
 ```
-####Configuration
+#### Configuration
 * dot to the configuration file and paste the code below
 * file could be find on path ```/etc/nginx/site-available/default ```
 * don't forget make a path of folder ```root /path/to/the/clone/folder/of/dothat;```
@@ -85,7 +85,7 @@ server {
 ```
 
 ---- 
-#Installing PHP
+# Installing PHP
 ```bash
 $ sudo apt-get install php7.0-fpm
 ```
@@ -96,7 +96,7 @@ $ sudo apt-get install php
 ```
 
 ----
-#Installing Postgresql
+# Installing Postgresql
 ```bash
 $ sudo apt-get install postgresql postgresql-contrib
 ```
