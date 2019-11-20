@@ -11,6 +11,7 @@ create	table users (
 	followers integer null,
 	following integer null,
 	status varchar(64) null,
+        session_id varchar(256) null;
 	primary key(id)
 );
 create table followers (
