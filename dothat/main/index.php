@@ -160,10 +160,3 @@ function resize_image($file, $percent) {
 </script>
 </body>
 </html>
-
-
-<!-- 
-?a=" in (toString=alert.window%2b")/
-
-?a " in (getString (/[^\n](a+)+/))"
--->
