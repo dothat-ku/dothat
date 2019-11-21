@@ -2,6 +2,8 @@ create	table users (
 	id SERIAL not null,
 	username varchar(64) not null,
 	password varchar(108) not null,
+	first_name varchar (88) null,
+	last_name varchar (88) null,
 	email varchar (128) not null,
 	phone varchar (128) null,
 	birthday varchar (45) null,
@@ -12,7 +14,9 @@ create	table users (
 	following integer null,
 	status varchar(64) null,
     session_id varchar(256) null,
-	primary key(id)
+	primary key(id),
+	unique (username),
+	unique(email)
 );
 create table followers (
 	id SERIAL,
@@ -58,15 +62,25 @@ create table comments (
 	foreign key (user_id) references users(id)
 		on delete set null
 );
+create table sessions (
+	id SERIAL,
+	user_id integer,
+	ip_address varchar(44),
+	device_name varchar(88),
+	foreign key (user_id) references users(id)
+		on delete set null
+);
 create table blacklist (
 	id SERIAL,
 	ip varchar (15)	
 );
 
-/*drop table comments;
-drop table posts;
-drop table following;
-drop table followers;
-drop table users;
-drop table blacklist;
+/*
+drop table comments CASCADE;
+drop table posts CASCADE;
+drop table following CASCADE;
+drop table followers CASCADE;
+drop table blacklist CASCADE;
+drop table sessions CASCADE;
+drop table users CASCADE;
 */

@@ -1,23 +1,15 @@
-----
 <img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="200" width="200" >
 
-# Dothat
+# dothat@KU (COSE451)
 
+### Team Members: 
+- Shon 
+- Yun
+- Joey
+- John
 
-dothat team project at KU (COSE451)
+-----
 
-- Team Members: Shon | Yun | Joey | John 
-
-
------
------
------
------
------
------
------
------
-----
 ## Requirement
 - Nginx
 - PHP
@@ -30,18 +22,18 @@ dothat team project at KU (COSE451)
 
 * type in terminal
 
-```bash
+```sh
 $ sudo apt-get update
 ```
 
 ----
 # Installing Nginx
-```bash
+```sh
 $ sudo apt-get install nginx-full
 ```
 * commands
 
-```bash
+```sh
 $ sudo service nginx start | restart | reload | stop | status
 ```
 #### Configuration
@@ -49,7 +41,7 @@ $ sudo service nginx start | restart | reload | stop | status
 * file could be find on path ```/etc/nginx/site-available/default ```
 * don't forget make a path of folder ```root /path/to/the/clone/folder/of/dothat;```
 
-```bash
+```sh
 limit_req_zone $binary_remote_addr zone=one:10m rate=30r/m;
 
 
@@ -83,27 +75,34 @@ server {
 	}
 }
 ```
+* reload and restart nginx server configurations with :
+
+```sh
+$ sudo service nginx reload
+$ sudo service nginx restart
+```
+
 
 ---- 
 # Installing PHP
-```bash
+```sh
 $ sudo apt-get install php7.0-fpm
 ```
 * or 
 
-```bash
+```sh
 $ sudo apt-get install php
 ```
 
 ----
 # Installing Postgresql
-```bash
+```sh
 $ sudo apt-get install postgresql postgresql-contrib
 ```
-* Usage postgresql guideline given [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
+* Usage of postgresql guides are given [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
 
-* Once you had installed the postgres sign in via command line interface and create a database called ```dothat```. 
-```bash
+* Once you had installed DB postgres, sign in via command line interface and create a database called ```dothat```. 
+```sh
 $ psql -U postgres
 Password for user postgres: 
 psql (9.5.19)
@@ -111,20 +110,31 @@ Type "help" for help.
 ```
 
 * To create database
-```bash
+```sh
 CREATE DATABASE dothat;
 ```
-```bash
+```sh
 postgres=# \c dothat
 You are now connected to database "dothat" as user "postgres".
 dothat=# 
 ```
 * To make a database scheme just import using below code:
-```bash
+```sh
 \i /path/to/dothat/SQL_Querry.sql
 ```
+This will makes easy connection with web application.
 
+----
 
-This will make easy connection for web application.
+# Connection : dothat &rightarrow; postgreSQL
 
+- Change database password configuration in project ```doatht/load.php ```. where ```'your_db_password'``` Open file ```.php``` with any text editor.
+```php
+// definition of DB connection
+define(DB_HOST, 'localhost');
+define(DB_PORT, '5432');
+define(DB_PASSWD, 'your_db_password');
+define(DB_USER, 'postgres');
+define(DB_NAME, 'dothat');
+```
 - if there are some confusing parts please just ignoree and try to make attack others' project. Good luck.
