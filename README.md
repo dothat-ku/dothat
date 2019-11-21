@@ -1,4 +1,4 @@
-<img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="200" width="200" >
+<img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="230" width="230" >
 
 # dothat@KU (COSE451)
 
