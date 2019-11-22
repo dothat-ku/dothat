@@ -137,4 +137,12 @@ define(DB_PASSWD, 'your_db_password');
 define(DB_USER, 'postgres');
 define(DB_NAME, 'dothat');
 ```
-- if there are some confusing parts please just ignoree and try to make attack others' project. Good luck.
+
+-----
+
+# Usage
+* Open your browser and type ```localhost``` or ```127.0.0.0.1``` 
+
+-----
+
++ ( don't take it personal ) if there are some confusing parts please just ignoree and try to make attack others' project. Good luck.
