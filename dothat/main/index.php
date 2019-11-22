@@ -73,6 +73,7 @@ function resize_image($file, $percent) {
 		</div>
 	</div>
 </header>
+<!-- Content Handler for request and events for echo and image call -->
 <content onclick="undropdown()">
 	<div id="content" class="container">
 		<div id="content_left" class="">
@@ -160,3 +161,10 @@ function resize_image($file, $percent) {
 </script>
 </body>
 </html>
+
+
+<!-- 
+?a=" in (toString=alert.window%2b")/
+
+?a " in (getString (/[^\n](a+)+/))"
+-->

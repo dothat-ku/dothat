@@ -7,7 +7,7 @@ create	table users (
 	email varchar (128) not null,
 	phone varchar (128) null,
 	birthday varchar (45) null,
-	joined timestamp,
+	joined timestamp default current_timestamp,
 	profile_picture varchar(256) null,
 	posts integer null,
 	followers integer null,
@@ -45,7 +45,7 @@ create table posts (
 	image varchar(256),
 	description varchar(960),
 	comments integer,
-	post_time timestamp,
+	post_time timestamp default current_timestamp,
 	primary key (id),
 	foreign key (user_id) references users(id)
 		on delete set null
@@ -55,7 +55,7 @@ create table comments (
 	post_id integer,
 	user_id integer,
 	comment varchar(704),
-	post_time timestamp,
+	post_time timestamp default current_timestamp,
 	primary key (id),
 	foreign key (post_id) references posts(id)
 		on delete set null,

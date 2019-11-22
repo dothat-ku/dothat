@@ -2,12 +2,12 @@
 session_start();
 $session_id = session_id();
 
+include('load.php');
+
 if (isset($_SESSION['username'])) {
 		header('location: main/');
 }
-if (isset($_GET['login'])) {
-	$_SESSION['username'] = $_GET['login'];
-}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -49,7 +49,7 @@ if (isset($_GET['login'])) {
 					<div class="valid  valid_2"></div>
 				</div>			
 			</div>
-			<button id="logbtn" type="submit" name="sigin" class="google_sans blue_button g-recaptcha" style="border: none; font-size: 15px;" data-sitekey="6LcsWsMUAAAAAFPAYSO-XNqwVttdNKvdmQex4urf" data-callback='onSubmit'>contnue</button>
+			<button id="logbtn" type="submit" name="sigin" class="google_sans blue_button" style="border: none; font-size: 15px;">contnue</button>
 			<div class="flex_row_space_between">
 				<div class="offer" style="cursor: pointer;" onclick="tab();">CREATE ACCOUNT</div>
 				<div class="asking" >forgot password?</div>
@@ -79,7 +79,7 @@ if (isset($_GET['login'])) {
 					<div class="valid valid_6"></div>
 				</div>
 			</div>
-			<button id="upbtn" type="submit" name="signup" class="google_sans blue_button g-recaptcha"  style="border: none; font-size: 15px;" data-sitekey="6LcsWsMUAAAAAFPAYSO-XNqwVttdNKvdmQex4urf" data-callback='onSubmit'>sign up</button>
+			<button id="upbtn" class="google_sans blue_button"  style="border: none; font-size: 15px;" data-callback='onSubmit'>sign up</button>
 			<div class="flex_row_space_between">
 				<div class="offer" style="cursor: pointer;" onclick="tab();">SIGN IN ACCOUNT</div>
 				<div class="offer"></div>
@@ -87,39 +87,26 @@ if (isset($_GET['login'])) {
 		</form>
 	</div>
 </div>
-<div id="ddemo" style="position: absolute; top: 20px; right: 20px; width: 100px; height: 30px; background-color: #fff;"></div>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>
-       function onSubmit(token) {
-         document.getElementById("in").submit();
-       }
-       function onSubmit(token) {
-         document.getElementById("up").submit();
-       }
-     </script>
+<script>   
+   function onSubmit(token) {
+     document.getElementById("up").submit();
+   }
+</script>
 <script type="text/javascript">
 	function _(e) {
 		return document.getElementById(e);
 	}
 	function $(c, n) {
 		return document.getElementsByClassName(c)[n];
-	}
-	window.onload = function () {
-		/*_('logbtn').style.cursor = 'progress';
-		_('logbtn').style.backgroundColor = 'grey';
-		_('logbtn').disabled = false;
-		_('upbtn').style.cursor = 'progress';
-		_('upbtn').style.backgroundColor = 'grey';
-		_('upbtn').disabled = false;*/
-
-	}
+	}	
 	function true_or_false(match, classes, n) {
-		if (match) {
-			$(classes, n).style.color = "#00ff00";
-			$(classes, n).innerHTML = "☑";
-		}else {
+		if (!match) {
 			$(classes, n).style.color = "#ff0000";
 			$(classes, n).innerHTML = "!";			
+		}else {
+			$(classes, n).style.color = "#00ff00";
+			$(classes, n).innerHTML = "☑";
 		}
 	}
 	function mailchar(email) {
@@ -127,14 +114,40 @@ if (isset($_GET['login'])) {
 		return filter.test(email);
 	}
 	function passchar(pass) {
-		var filter = /^([a-zA-Z0-9_.-])+$/;
+		var filter = /^([a-zA-Z0-9_%@!?]*)+$/;
 		return filter.test(pass);
 	}
-	function EventHandler(id, cl, n, fun) {
-		_(id).addEventListener('keydown', function () {true_or_false(fun(_(id).value), cl, n)}, false);		
+	function namechar(name) {
+		var filter = /^([a-zA-Z0-9_.]*)$/;
+		return filter.test(name);
 	}
-	EventHandler('lun', 'valid valid_1', 0, mailchar);
-	EventHandler('lpw', 'valid valid_2', 0, passchar);
+	function isSame(a) {
+		if (_(a[0]).value === _(a[1]).value) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	function dd(a, b) {
+		if (isSame([a, b])) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	function EventHandler(id, cl, n, fun) {
+		_(id).addEventListener('blur', function () {true_or_false(fun(_(id).value), cl, n)}, false);		
+	}
+	function SameHandler(id, array, cl, n, fun) {
+		_(id).addEventListener('blur', function () {true_or_false(fun(array), cl, n)}, false);			
+	}
+	EventHandler('lun', 'valid valid_1', 0, mailchar); //lun - login inputs
+	EventHandler('lpw', 'valid valid_2', 0, passchar); //lpw - login password
+	EventHandler('sun', 'valid valid_3', 0, namechar); //sun - signup username
+	EventHandler('smail', 'valid valid_4', 0, mailchar); //smail - signup email
+	EventHandler('spw', 'valid valid_5', 0, passchar); //spw - signup password
+	SameHandler('scpw', ['scpw', 'spw'], 'valid valid_6', 0, isSame); //scpw - signup password confirmation
+	
 </script>
 </body>
 </html>
