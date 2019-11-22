@@ -70,7 +70,7 @@ $AES = new dothat_AES();
 *
 */
 
-if (isset($_POST['g-recaptcha-response'])) {
+if (isset($_POST['signup'])) {
 	$username = pg_escape_string($db, $_POST['identity']);
 	$email = pg_escape_string($db, $_POST['enmail']);
 	$password_1 = pg_escape_string($db, $_POST['enpw']);

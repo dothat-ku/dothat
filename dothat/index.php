@@ -79,7 +79,7 @@ if (isset($_SESSION['username'])) {
 					<div class="valid valid_6"></div>
 				</div>
 			</div>
-			<button id="upbtn" class="google_sans blue_button"  style="border: none; font-size: 15px;" data-callback='onSubmit'>sign up</button>
+			<button id="upbtn" class="google_sans blue_button" name="signup" style="border: none; font-size: 15px;" data-callback='onSubmit'>sign up</button>
 			<div class="flex_row_space_between">
 				<div class="offer" style="cursor: pointer;" onclick="tab();">SIGN IN ACCOUNT</div>
 				<div class="offer"></div>
@@ -103,7 +103,7 @@ if (isset($_SESSION['username'])) {
 	function true_or_false(match, classes, n) {
 		if (!match) {
 			$(classes, n).style.color = "#ff0000";
-			$(classes, n).innerHTML = "!";			
+			$(classes, n).innerHTML = "!";
 		}else {
 			$(classes, n).style.color = "#00ff00";
 			$(classes, n).innerHTML = "☑";
