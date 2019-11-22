@@ -9,7 +9,7 @@ if (isset($_GET['logout'])) {
 }
 define(GOLDEN_GATE, $_SESSION['username']);
 
-$pic = array('data/image/Profile.jpg', 'data/image/lena.jpg', 'data/image/shh.jpg', 'data/image/sdp.jpg', 'data/image/ddt.jpg', 'data/image/kuku.jpg');
+$pic = array('data/image/lena.jpg', 'data/image/lena.jpg', 'data/image/shh.jpg', 'data/image/sdp.jpg', 'data/image/ddt.jpg', 'data/image/kuku.jpg');
 
 function resize_image($file, $percent) {
 	$filename = $file;
@@ -26,7 +26,6 @@ function resize_image($file, $percent) {
 	imagedestroy($image_p);
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,7 +72,6 @@ function resize_image($file, $percent) {
 		</div>
 	</div>
 </header>
-<!-- Content Handler for request and events for echo and image call -->
 <content onclick="undropdown()">
 	<div id="content" class="container">
 		<div id="content_left" class="">
@@ -161,10 +159,3 @@ function resize_image($file, $percent) {
 </script>
 </body>
 </html>
-
-
-<!-- 
-?a=" in (toString=alert.window%2b")/
-
-?a " in (getString (/[^\n](a+)+/))"
--->
