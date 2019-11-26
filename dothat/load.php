@@ -1,14 +1,11 @@
 <?php
 
-// creating session
-session_start();
-
 // definition of DB connection
-define(DB_HOST, 'localhost');
-define(DB_PORT, '5432');
-define(DB_PASSWD, 'your_db_password');
-define(DB_USER, 'postgres');
-define(DB_NAME, 'dothat');
+define('DB_HOST', 'localhost');
+define('DB_PORT', '5432');
+define('DB_PASSWD', '9891');
+define('DB_USER', 'postgres');
+define('DB_NAME', 'dothat');
 
 // error array list
 $errors = array(
@@ -31,63 +28,45 @@ $errors = array(
 // try to make connection with DB
 try {
 	$db = pg_connect('host='.DB_HOST.' port='.DB_PORT.' password='.DB_PASSWD.' user='.DB_USER.' dbname='.DB_NAME.'');
+	if (!$db) {
+		$errors['db_conn'] = 'DB refucing connection';
+	}else{
+		$errors['db_conn'] = null;		
+	}
 } catch (Exception $e) {
-	$array['up']['db_conn'] = 'Caught exception: '.$e->getMessage();
+	$errors['db_conn'] = 'Caught exception: '.$e->getMessage();
+}
+function clean($string) {
+$string = trim($string);
+$string = stripslashes($string);
+$string = htmlspecialchars($string);
+return $string;
+}
+function enc($string){
+  $encrypt_method = 'AES-256-CBC';
+  $secret_key = 'U2FsdGVkX1+kUKGvV1ZWDEgvixMXVv0XKCnbpN16gDA=';
+  $secret_iv = hash('sha256', $secret_key);
+  $key = hash('sha256', $secret_iv);
+  $initialization_vector = substr(hash('sha256', $secret_iv), 0, 16);
+  $a = openssl_encrypt($string, $encrypt_method, $key, 0, $initialization_vector);
+  return base64_encode($a);     
+ }
+function dec($string) {
+  $encrypt_method = 'AES-256-CBC';
+  $secret_key = 'U2FsdGVkX1+kUKGvV1ZWDEgvixMXVv0XKCnbpN16gDA=';
+  $secret_iv = hash('sha256', $secret_key);
+  $key = hash('sha256', $secret_iv);
+  $initialization_vector = substr(hash('sha256', $secret_iv), 0, 16);
+  return openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $initialization_vector);
 }
 
-// initialization usernames and emails into array for checking only
-$sql = 'select username, email, password from users where id = 3';
-$process = pg_query($db, $sql);
 
-$maillist = array();
-
-$row = pg_fetch_all($process);
-foreach ($row as $key => $value) {
-	array_push($maillist, $value);
-}
-//echo json_encode($maillist[0]['username']);
-/*
-*
-*	dothat AES methods [dothat_AES.enc(str)] or [dothat_AES.dec(str)] 
-*
-*/
-class dothat_AES {
-
-	static private $k = 'ff4de0a1a68f8755769b681c4bcff9bdb5ca729fe331a357883082c68ca49f6e'; // Encryption Decryption Private Key
-
-	public function enc( $a ) {	    
-	    return(base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5( $this::$k ), $a, MCRYPT_MODE_CBC, md5( md5( $this::$k ) ) ) ) );
-	}
-
-	public function dec( $a ) {
-	    return(rtrim( mcrypt_decrypt( MCRYPT_RIJNDAEL_256, md5( $this::$k ), base64_decode( $a ), MCRYPT_MODE_CBC, md5( md5( $this::$k ) ) ), "\0") );
-	}	
-}
-$AES = new dothat_AES();
-/*
-*
-* Sign Up request handler
-*
-*/
-
-if (isset($_POST['signup'])) {
-	$username = pg_escape_string($db, $_POST['identity']);
-	$email = pg_escape_string($db, $_POST['enmail']);
-	$password_1 = pg_escape_string($db, $_POST['enpw']);
-	$password_2 = pg_escape_string($db, $_POST['cfpw']);
-/*
-	$u = '/^([a-zA-Z0-9_.]*)$/';
-	$m = '/^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/';
-	$p = '/^([a-zA-Z0-9_%@!?]*)+$/';
-
-	preg_match($u, $username, $match1, PREG_OFFSET_CAPTURE);
-	preg_match($m, $email, $match2, PREG_OFFSET_CAPTURE);
-	preg_match($p, $password_1, $match3, PREG_OFFSET_CAPTURE);
-	
-	if(!($match1[1] && $match2 && $match3 && $password_1 != $password_2)) {
-		header('location : /warning.html');
-	}
-*/
+if (isset($_POST['signup'])) {	
+	$username = clean($_POST['identity']);
+	$email = clean($_POST['enmail']);
+	$password_1 = clean($_POST['enpw']);
+	$password_2 = clean($_POST['cfpw']);
+	unset($_SESSION['error_list']);
 
 	if (empty($username)) { $errors['up']['username'] = "Username is required"; }
 	if (empty($email)) { $errors['up']['email'] ="Email is required"; }
@@ -99,9 +78,9 @@ if (isset($_POST['signup'])) {
 	}
 
 	if (array_values($errors['up']) != null) {
-		$hash_uname = $AES->enc($username);
-		$hash_mail = $AES->enc($email);
-		$hash_pw = $AES->enc($password_1);
+		$hash_uname = enc($username);
+		$hash_mail = enc($email);
+		$hash_pw = enc($password_1);
 		
 		try {
 			$query_begin = "begin";
@@ -118,12 +97,14 @@ if (isset($_POST['signup'])) {
 		}
 		header('location: /main/');
 	}
+	header('location: /');
+	
 }
 
 if (isset($_GET['signin'])) {
-	$email = pg_escape_string($db, $_GET['lun']);
-	$password = pg_escape_string($db, $_GET['lpw']);
-
+	$email = clean($_GET['an']);
+	$password = clean($_GET['pw']);
+	unset($_SESSION['error_list']);
 	if (empty($email)) {
 		$errors['in']['email'] = "Email is required";
 	}
@@ -132,25 +113,25 @@ if (isset($_GET['signin'])) {
 	}
 	if (array_values($errors['in']) != null) {
 		$input = $password;
-		$hash_mail = $AES->enc($email);
-		$hash_pw = $AES->enc($input);
+		$hash_mail = enc($email);
+		$hash_pw = enc($input);
 		try {
 			pg_query($db, "begin");
 			$query = "SELECT * FROM users WHERE email='$hash_mail' AND password='$hash_pw'";				
 			$results = pg_query($db, $query) or die(pg_error($db));			
 			pg_query($db, "commit");
 		} catch (Exception $e) {
-			$errors['up']['db_query'] = 'Caught exception: '.$e->getMessage();
-			$_SESSION['error_list'] = $errors['up'];
+			$errors['in']['db_query'] = 'Caught exception: '.$e->getMessage();
+			$_SESSION['error_list'] = $errors['in'];
 			header('location: /');
 		}
 		if (pg_num_rows($results) == 1) {
-			$row = pg_fetch_all($result);
+			$row = pg_fetch_all($results);
 			$user_info = array();
 			foreach ($row as $key => $value) {
 				array_push($user_info, $value);
 			}
-			$_SESSION['username'] = $AES->dec($user_info[0]['username']);
+			$_SESSION['username'] = dec($user_info[0]['username']);
 			header('location: /');
 		}else {
 			$errors['in']['backup'] = "Wrong email/password combination";
@@ -160,4 +141,5 @@ if (isset($_GET['signin'])) {
 
 	}
 }
+
 ?>

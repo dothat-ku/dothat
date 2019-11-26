@@ -36,15 +36,42 @@ $ sudo apt-get install nginx-full
 ```sh
 $ sudo service nginx start | restart | reload | stop | status
 ```
-#### Configuration
-* dot to the configuration file and paste the code below
-* file could be find on path ```/etc/nginx/site-available/default ```
-* don't forget make a path of folder ```root /path/to/the/clone/folder/of/dothat;```
+
+---- 
+# Installing PHP
+```sh
+$ sudo apt-get install php-fpm php-pgsql php-mysql
+```
+* or 
 
 ```sh
-limit_req_zone $binary_remote_addr zone=one:10m rate=30r/m;
+$ sudo apt-get install php
+```
+#### Configure Nginx to Use the PHP Processor
+* Open the Nginx default server block by typing the below command in the terminal
+```sh
+sudo nano /etc/nginx/site-available/default
+```
+* first, add index.php file so that index.php file can be served
+```sh
+index index.php index.html index.htm index.nginx-debian.html;
+```
 
+* uncomment the following lines from the file
+```sh
+location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		#fastcgi_pass 127.0.0.1:9000;
+		fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+	}
 
+	location ~ /\.ht {
+		deny all;
+```
+
+* Change the root to make a path to your dothat folder: ```root /path/to/the/clone/folder/of/dothat;```
+* Your file should look something like this at the end
+```sh
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
@@ -54,7 +81,7 @@ server {
 	listen [::]:443 ssl default_server;	
 	include snippets/snakeoil.conf;
 
-	root /path/to/the/clone/folder/of/dothat;
+	root /home/john/dothat-master/dothat
 	
 	index index.php index.html index.htm index.nginx-debian.html;
 
@@ -75,23 +102,19 @@ server {
 	}
 }
 ```
-* reload and restart nginx server configurations with :
+* save the file and check if everything is working fine by running the following commands
+```sh
+sudo nginx -t
+```
+* If everything works fine then reload the server by typing below the line in the terminal
+```sh
+sudo systemctl reload nginx
+```
 
+* reload and restart nginx server configurations with :
 ```sh
 $ sudo service nginx reload
 $ sudo service nginx restart
-```
-
-
----- 
-# Installing PHP
-```sh
-$ sudo apt-get install php7.0-fpm
-```
-* or 
-
-```sh
-$ sudo apt-get install php
 ```
 
 ----
@@ -99,9 +122,58 @@ $ sudo apt-get install php
 ```sh
 $ sudo apt-get install postgresql postgresql-contrib
 ```
-* Usage of postgresql guides are given [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
+#### change to root user
 
-* Once you had installed DB postgres, sign in via command line interface and create a database called ```dothat```. 
+```sh
+sudo su
+```
+
+#### login and connect as default user
+```sh
+sudo -u postgres psql
+```
+* If this is successful, skip to the changing the password section
+* If you recieved an error stating that database "postgres" doesn't exist, try connecting to template1 and if successful, continue to changing the password
+```sh
+sudo -u postgres psql template1
+```
+
+#### Authentication Error
+* You need to go to the config file, typically located at ```/etc/postgresql/#.#/main/pg_hba.conf ```
+* To check the #.# run the following code
+```sh
+ls /etc/postgresql/
+```
+* The number that appears after running that code will replace the #.# part of the location
+* For example:
+```sh
+sudo nano /etc/postgresql/10/main/pg_hba.conf
+```
+* Change
+```sh
+   local   all             all                                     peer
+```
+* to
+```sh
+  local   all             all                                     md5
+```
+* then restart the server
+```sh
+sudo service postgresql restart
+```
+
+#### Changing Password
+* With an extablished connection to Postgres, issue to ```ALTER USER``` command to change the password for the ```postgres``` user
+```sh
+postgres=# ALTER USER postgres PASSWORD 'myPassword';
+ALTER ROLE
+```
+* To exit psql client use the \q command
+```sh
+\q
+```
+
+* You can now load into postgres
 ```sh
 $ psql -U postgres
 Password for user postgres: 
@@ -109,15 +181,19 @@ psql (9.5.19)
 Type "help" for help.
 ```
 
+
+#### Creating Database
 * To create database
 ```sh
 CREATE DATABASE dothat;
 ```
+* Connect to dothat
 ```sh
 postgres=# \c dothat
 You are now connected to database "dothat" as user "postgres".
 dothat=# 
 ```
+
 * To make a database scheme just import using below code:
 ```sh
 \i /path/to/dothat/SQL_Querry.sql
@@ -128,7 +204,7 @@ This will makes easy connection with web application.
 
 # Connection : dothat &rightarrow; postgreSQL
 
-- Change database password configuration in project ```doatht/load.php ```. where ```'your_db_password'``` Open file ```.php``` with any text editor.
+- Change database password configuration in project ```dothat/load.php ```  where ```'your_db_password' to your current postgres``` to your current postgres password. Open file ```load.php``` with any text editor.
 ```php
 // definition of DB connection
 define(DB_HOST, 'localhost');

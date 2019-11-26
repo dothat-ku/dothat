@@ -17,7 +17,6 @@ if (isset($_SESSION['username'])) {
 	<link rel="stylesheet" type="text/css" href="css/welcome.css">
 	<meta name="viewport" content="width=device-width" />
 	<meta name="theme-color" content="#ffffff" />
-
 </head>
 <body>
 <div id="content" class="flex_row_center">
@@ -40,16 +39,16 @@ if (isset($_SESSION['username'])) {
 			<div id="loginform" class="wide">
 				<label>Email*</label>
 				<div class="flex_row_space_between input">
-					<input type="text" id="lun" class="input_type" name="an" autocomplete="off" minlength="5" maxlength="70" autofocus required>
-					<div class="valid valid_1"></div>
+					<input type="text" id="lun" class="input_type" name="an" autocomplete="off" minlength="5" maxlength="70" autofocus>
+					<div class="valid valid_1 tooltip"></div>
 				</div>
 				<label>Password*</label>
 				<div class="flex_row_space_between input">
-					<input type="password" id="lpw" class="input_type" name="pw" autocomplete="off" minlength="4" maxlength="50" required>
-					<div class="valid  valid_2"></div>
+					<input type="password" id="lpw" class="input_type" name="pw" autocomplete="off" minlength="4" maxlength="50">
+					<div class="valid  valid_2 tooltip"></div>
 				</div>			
 			</div>
-			<button id="logbtn" type="submit" name="sigin" class="google_sans blue_button" style="border: none; font-size: 15px;">contnue</button>
+			<button id="logbtn" name="signin" class="google_sans blue_button" style="border: none; font-size: 15px;" data-callback='inSubmit'>contnue</button>
 			<div class="flex_row_space_between">
 				<div class="offer" style="cursor: pointer;" onclick="tab();">CREATE ACCOUNT</div>
 				<div class="asking" >forgot password?</div>
@@ -60,26 +59,26 @@ if (isset($_SESSION['username'])) {
 			<div class="wide">
 				<label>Username*</label>
 				<div class="flex_row_space_between input">
-					<input type="text" id="sun" class="input_type" name="identity" autocomplete="off"  maxlength="31" required>
-					<div class="valid valid_3"></div>
+					<input type="text" id="sun" class="input_type" name="identity" autocomplete="off"  maxlength="31">
+					<div class="valid valid_3 tooltip"></div>
 				</div>
 				<label>Email*</label>
 				<div class="flex_row_space_between input">
-					<input type="text" id="smail" class="input_type" name="enmail" autocomplete="off"  minlength="5" maxlength="70" required>
-					<div class="valid  valid_4"></div>
+					<input type="text" id="smail" class="input_type" name="enmail" autocomplete="off"  minlength="5" maxlength="70">
+					<div class="valid  valid_4 tooltip"></div>
 				</div>
 				<label>Password*</label>
 				<div class="flex_row_space_between input">
-					<input type="password" id="spw" class="input_type" name="enpw" autocomplete="off"  minlength="4" maxlength="50" required>
-					<div class="valid  valid_5"></div>
+					<input type="password" id="spw" class="input_type" name="enpw" autocomplete="off"  minlength="4" maxlength="50">
+					<div class="valid  valid_5 tooltip"></div>
 				</div>
 				<label>Confirm Password*</label>
 				<div class="flex_row_space_between input">
-					<input type="password" id="scpw" class="input_type" name="cfpw" autocomplete="off" minlength="4" maxlength="50" required>
-					<div class="valid valid_6"></div>
+					<input type="password" id="scpw" class="input_type" name="cfpw" autocomplete="off" minlength="4" maxlength="50">
+					<div class="valid valid_6 tooltip"></div>
 				</div>
 			</div>
-			<button id="upbtn" class="google_sans blue_button" name="signup" style="border: none; font-size: 15px;" data-callback='onSubmit'>sign up</button>
+			<button id="upbtn" class="google_sans blue_button" name="signup" style="border: none; font-size: 15px;">sign up</button>
 			<div class="flex_row_space_between">
 				<div class="offer" style="cursor: pointer;" onclick="tab();">SIGN IN ACCOUNT</div>
 				<div class="offer"></div>
@@ -87,31 +86,35 @@ if (isset($_SESSION['username'])) {
 		</form>
 	</div>
 </div>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>   
-   function onSubmit(token) {
-     document.getElementById("up").submit();
-   }
-</script>
 <script type="text/javascript">
+	let login_valid = {'email':false, 'password':false};
+	let login_message = {
+		'isEmailEmpty':'Email is required!', 
+		'isEmailValid':'Email must be valid!',
+		'isPassEmpty':'Password is required!', 
+		'isPassValid':'Password string should avoid (+ = - / ? > < . , * ~ ` )'
+	};
+	let sign_valid = {'username':false, 'email':false, 'password_a':false, 'password_b':false};
+	let signup_message = {
+		'isUsernameEmpty' : 'Username is required!',
+		'isUsernameValid' : 'Username must be valid [a-zA-Z0-9_]',
+		'isEmailEmpty':'Email is required!', 
+		'isEmailValid':'Email must be valid!',
+		'isPassEmpty':'Password is required!', 
+		'isPassValid':'Password string should avoid (+ = - / ? > < . , * ~ ` )',
+		'isCPassEmpty':'Confirm password is required!', 
+		'isCPassValid':'Confirm password!'
+	};
+	
 	function _(e) {
 		return document.getElementById(e);
 	}
 	function $(c, n) {
 		return document.getElementsByClassName(c)[n];
 	}	
-	function true_or_false(match, classes, n) {
-		if (!match) {
-			$(classes, n).style.color = "#ff0000";
-			$(classes, n).innerHTML = "!";
-		}else {
-			$(classes, n).style.color = "#00ff00";
-			$(classes, n).innerHTML = "☑";
-		}
-	}
 	function mailchar(email) {
 		var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
-		return filter.test(email);
+		return (filter.test(email));
 	}
 	function passchar(pass) {
 		var filter = /^([a-zA-Z0-9_%@!?]*)+$/;
@@ -121,33 +124,140 @@ if (isset($_SESSION['username'])) {
 		var filter = /^([a-zA-Z0-9_.]*)$/;
 		return filter.test(name);
 	}
-	function isSame(a) {
-		if (_(a[0]).value === _(a[1]).value) {
-			return true;
+	function disabledBTN(id, bool) {
+		if(bool){
+			_(id).style.backgroundColor= 'rgba(61, 165, 255, 1)';
+			_(id).style.cursor = 'default';
+			_(id).disabled = false;
 		}else {
-			return false;
+			_(id).style.backgroundColor= '#555';
+			_(id).style.cursor = 'pointer';
+			_(id).disabled = true;			
 		}
 	}
-	function dd(a, b) {
-		if (isSame([a, b])) {
-			return true;
-		}else{
-			return false;
+	function CallBack(id) { 
+		if(!(login_valid['email'] && login_valid['password'])) {
+			disabledBTN(id, false);
+		} else {
+			disabledBTN(id, true);	
 		}
 	}
-	function EventHandler(id, cl, n, fun) {
-		_(id).addEventListener('blur', function () {true_or_false(fun(_(id).value), cl, n)}, false);		
+	function CallBackUp(id) { 
+		if(sign_valid['username'] == true && sign_valid['email'] == true && sign_valid['password_a'] == true && sign_valid['password_b'] == true) {
+			disabledBTN(id, true);	
+		} else {
+			disabledBTN(id, false);
+		}
 	}
-	function SameHandler(id, array, cl, n, fun) {
-		_(id).addEventListener('blur', function () {true_or_false(fun(array), cl, n)}, false);			
+	window.onload = function() {
+		disabledBTN('logbtn', false);	
+		disabledBTN('upbtn', false);		
 	}
-	EventHandler('lun', 'valid valid_1', 0, mailchar); //lun - login inputs
-	EventHandler('lpw', 'valid valid_2', 0, passchar); //lpw - login password
-	EventHandler('sun', 'valid valid_3', 0, namechar); //sun - signup username
-	EventHandler('smail', 'valid valid_4', 0, mailchar); //smail - signup email
-	EventHandler('spw', 'valid valid_5', 0, passchar); //spw - signup password
-	SameHandler('scpw', ['scpw', 'spw'], 'valid valid_6', 0, isSame); //scpw - signup password confirmation
-	
+	/// Login in form 
+	_('lun').addEventListener('blur', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_1 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_1 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+login_message['isEmailEmpty']+"</span>";
+				login_valid['email'] = false;
+			}else if (!mailchar(this.value)){
+				$('valid valid_1 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_1 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+login_message['isEmailValid']+"</span>";				
+				login_valid['email'] = false;
+			}else {
+				$('valid valid_1 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_1 tooltip', 0).innerHTML = '☑';
+				login_valid['email'] = true;
+			}
+			CallBack('logbtn');
+		},  true);
+	_('lpw').addEventListener('blur', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_2 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_2 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+login_message['isPassEmpty']+"</span>";
+				login_valid['password'] = false;
+			}else if (!passchar(this.value)){
+				$('valid valid_2 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_2 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+login_message['isPassValid']+"</span>";				
+				login_valid['password'] = false;
+			}else {
+				$('valid valid_2 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_2 tooltip', 0).innerHTML = '☑';
+				login_valid['password'] = true;
+			}
+			CallBack('logbtn');
+		},  true);
+
+	/// Signuo form
+	_('sun').addEventListener('blur', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_3 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_3 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isUsernameEmpty']+"</span>";
+				sign_valid['username'] = false;
+			}else if (!namechar(this.value)){
+				$('valid valid_3 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_3 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isUsernameValid']+"</span>";				
+				sign_valid['username'] = false;
+			}else {
+				$('valid valid_3 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_3 tooltip', 0).innerHTML = '☑';
+				sign_valid['username'] = true;
+			}
+			CallBackUp('upbtn');
+		}, true);
+	_('smail').addEventListener('blur', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_4 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_4 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isEmailEmpty']+"</span>";
+				sign_valid['email'] = false;
+			}else if (!mailchar(this.value)){
+				$('valid valid_4 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_4 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isEmailValid']+"</span>";				
+				sign_valid['email'] = false;
+			}else {
+				$('valid valid_4 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_4 tooltip', 0).innerHTML = '☑';
+				sign_valid['email'] = true;
+			}
+			CallBackUp('upbtn');
+		},  true);
+	_('spw').addEventListener('blur', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_5 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_5 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isPassEmpty']+"</span>";
+				sign_valid['password_a'] = false;
+			}else if (!passchar(this.value)){
+				$('valid valid_5 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_5 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isPassValid']+"</span>";				
+				sign_valid['password_a'] = false;
+			}else {
+				$('valid valid_5 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_5 tooltip', 0).innerHTML = '☑';
+				sign_valid['password_a'] = true;
+			}
+			CallBackUp('upbtn');
+		},  true);
+	_('scpw').addEventListener('blur', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_6 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_6 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isCPassEmpty']+"</span>";
+				sign_valid['password_b'] = false;
+			}else if (_('scpw').value !== _('spw').value) {
+				$('valid valid_6 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_6 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+signup_message['isCPassValid']+"</span>";
+				sign_valid['password_b'] = false;
+			}else {
+				sign_valid['password_b'] = true;
+				$('valid valid_6 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_6 tooltip', 0).innerHTML = '☑';
+				CallBackUp('upbtn');
+			}
+		},  true);
 </script>
 </body>
 </html>
