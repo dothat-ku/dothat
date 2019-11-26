@@ -106,7 +106,7 @@ server {
 ```sh
 sudo nginx -t
 ```
-*If everything works fine then reload the server by typing below the line in the terminal
+* If everything works fine then reload the server by typing below the line in the terminal
 ```sh
 sudo systemctl reload nginx
 ```
