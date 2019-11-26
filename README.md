@@ -122,13 +122,13 @@ $ sudo service nginx restart
 ```sh
 $ sudo apt-get install postgresql postgresql-contrib
 ```
-#### Change to root user
+#### change to root user
 
 ```sh
 sudo su
 ```
 
-#### Login and connect as default user
+#### login and connect as default user
 ```sh
 sudo -u postgres psql
 ```
@@ -172,6 +172,15 @@ ALTER ROLE
 ```sh
 \q
 ```
+
+* You can now load into postgres
+```sh
+$ psql -U postgres
+Password for user postgres: 
+psql (9.5.19)
+Type "help" for help.
+```
+
 
 #### Creating Database
 * To create database
