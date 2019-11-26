@@ -122,13 +122,13 @@ $ sudo service nginx restart
 ```sh
 $ sudo apt-get install postgresql postgresql-contrib
 ```
-####change to root user
+#### Change to root user
 
 ```sh
 sudo su
 ```
 
-####login and connect as default user
+#### Login and connect as default user
 ```sh
 sudo -u postgres psql
 ```
@@ -138,7 +138,7 @@ sudo -u postgres psql
 sudo -u postgres psql template1
 ```
 
-####Authentication Error
+#### Authentication Error
 * You need to go to the config file, typically located at ```/etc/postgresql/#.#/main/pg_hba.conf ```
 * To check the #.# run the following code
 ```sh
@@ -162,7 +162,7 @@ sudo nano /etc/postgresql/10/main/pg_hba.conf
 sudo service postgresql restart
 ```
 
-####Changing Password
+#### Changing Password
 * With an extablished connection to Postgres, issue to ```ALTER USER``` command to change the password for the ```postgres``` user
 ```sh
 postgres=# ALTER USER postgres PASSWORD 'myPassword';
@@ -173,7 +173,7 @@ ALTER ROLE
 \q
 ```
 
-####Creating Database
+#### Creating Database
 * To create database
 ```sh
 CREATE DATABASE dothat;
