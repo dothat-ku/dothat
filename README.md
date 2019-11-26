@@ -40,7 +40,7 @@ $ sudo service nginx start | restart | reload | stop | status
 ---- 
 # Installing PHP
 ```sh
-$ sudo apt-get install php-fpm php-mysql
+$ sudo apt-get install php-fpm php-pgsql php-mysql
 ```
 * or 
 
