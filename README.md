@@ -221,4 +221,3 @@ define(DB_NAME, 'dothat');
 
 -----
 
-+ ( don't take it personal ) if there are some confusing parts please just ignoree and try to make attack others' project. Good luck.
