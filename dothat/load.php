@@ -1,9 +1,24 @@
 <?php
 
+
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+	$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+}elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+}else {
+	$ip_address = $_SERVER['REMOTE_ADDR'];
+}
+$ip_addr = clean($ip_address);
+if(isset($_SESSION['banned']) && !empty($_SESSION['banned'])) {
+	header('loaction : /ban');
+}
+if ($_SESSION['banned'] == 'banned_user') {
+		header('location: /ban');
+}
 // definition of DB connection
 define('DB_HOST', 'localhost');
 define('DB_PORT', '5432');
-define('DB_PASSWD', 'your_db_password');
+define('DB_PASSWD', '9891');
 define('DB_USER', 'postgres');
 define('DB_NAME', 'dothat');
 
@@ -16,16 +31,17 @@ $errors = array(
 			'password_1' => null,
 			'password_2' => null,
 			'password' => null,
-			'db_query' => null
+			'db_query' => null,
+			'ip' => null
 		],
 		'in' => [
 			'email' => null,
 			'password' => null,
-			'backup' => null
+			'backup' => null,
+			'ip' => null
 		]
 	); 
 
-// try to make connection with DB
 try {
 	$db = pg_connect('host='.DB_HOST.' port='.DB_PORT.' password='.DB_PASSWD.' user='.DB_USER.' dbname='.DB_NAME.'');
 	if (!$db) {
@@ -36,6 +52,29 @@ try {
 } catch (Exception $e) {
 	$errors['db_conn'] = 'Caught exception: '.$e->getMessage();
 }
+
+$sql = 'select ip from blacklist';
+$blacklist = array();
+$getIp = pg_query($db, $sql);
+$row = pg_fetch_all($getIp);
+foreach ($row as $key => $value) {
+  array_push($blacklist, $value['ip']);
+}
+
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+  $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+}elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+  $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+}else {
+  $ip_address = $_SERVER['REMOTE_ADDR'];
+}
+$ip_addr = $ip_address;
+
+if(in_array($ip_address, $blacklist)) {
+  $_SESSION['banned'] = 'banned_user';
+    header('location: /ban');
+}
+
 function clean($string) {
 $string = trim($string);
 $string = stripslashes($string);
@@ -59,8 +98,7 @@ function dec($string) {
   $initialization_vector = substr(hash('sha256', $secret_iv), 0, 16);
   return openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $initialization_vector);
 }
-
-
+// try to make connection with DB
 if (isset($_POST['signup'])) {	
 	$username = clean($_POST['identity']);
 	$email = clean($_POST['enmail']);
@@ -72,11 +110,30 @@ if (isset($_POST['signup'])) {
 	if (empty($email)) { $errors['up']['email'] ="Email is required"; }
 	if (empty($password_1)) { $errors['up']['password_1'] = "Password is required"; }
 	if (empty($password_2)) { $errors['up']['password_2'] = "Password should confirm!"; }
-
+	if (strlen($username) > 31 || strlen($email) > 72 || strlen($password_1) > 72 || strlen($password_1) > 72 ) {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+		}
+		$current_user = clean($ip_address);
+		try {
+			pg_query($db, 'begin');
+			$blacking = "INSERT INTO blacklist (ip) VALUES ('$current_user')";
+			pg_query($db, $blacking);
+			pg_query($db, 'commit');
+		}catch (Exception $e) {
+			$errors['up']['ip'] = 'Caught exception: '.$e->getMessage();
+		}
+		$_SESSION['banned'] = 'banned_user';
+		header('location: /ban');
+	}
 	if ($password_1 != $password_2) {
 		$errors['up']['password'] = "The two passwords do not match";
 	}
-
 	if (array_values($errors['up']) != null) {
 		$hash_uname = enc($username);
 		$hash_mail = enc($email);
@@ -98,7 +155,6 @@ if (isset($_POST['signup'])) {
 		header('location: /main/');
 	}
 	header('location: /');
-	
 }
 
 if (isset($_GET['signin'])) {
@@ -110,6 +166,27 @@ if (isset($_GET['signin'])) {
 	}
 	if (empty($password)) {
 		$errors['in']['password'] = "Password is required";
+	}
+	if (strlen($email) > 72 || strlen($password) > 72 ) {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip_address = $_SERVER['HTTP_CLIENT_IP'];
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+		}
+		$current_user = clean($ip_address);
+		try {
+			pg_query($db, 'begin');
+			$blacking = "INSERT INTO blacklist (ip) VALUES ('$current_user')";
+			pg_query($db, $blacking);
+			pg_query($db, 'commit');
+		}catch (Exception $e) {
+			$errors['in']['ip'] = 'Caught exception: '.$e->getMessage();
+		}
+		$_SESSION['banned'] = 'banned_user';
+		header('location: /ban');
 	}
 	if (array_values($errors['in']) != null) {
 		$input = $password;
@@ -141,5 +218,4 @@ if (isset($_GET['signin'])) {
 
 	}
 }
-
 ?>

@@ -7,7 +7,6 @@ include('load.php');
 if (isset($_SESSION['username'])) {
 		header('location: main/');
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -153,6 +152,8 @@ if (isset($_SESSION['username'])) {
 		disabledBTN('logbtn', false);	
 		disabledBTN('upbtn', false);		
 	}
+	_('logbtn').addEventListener('mouseover', CallBack('logbtn'), true);
+	_('upbtn').addEventListener('mouseover', CallBackUp('upbtn'), true);
 	/// Login in form 
 	_('lun').addEventListener('blur', 
 		function (){
@@ -168,6 +169,23 @@ if (isset($_SESSION['username'])) {
 				$('valid valid_1 tooltip', 0).style.color = "#00ff00";
 				$('valid valid_1 tooltip', 0).innerHTML = '☑';
 				login_valid['email'] = true;
+			}
+			CallBack('logbtn');
+		},  true);
+	_('lpw').addEventListener('keyup', 
+		function (){
+			if (!this.value > 0) {
+				$('valid valid_2 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_2 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+login_message['isPassEmpty']+"</span>";
+				login_valid['password'] = false;
+			}else if (!passchar(this.value)){
+				$('valid valid_2 tooltip', 0).style.color = "#ff0000";
+				$('valid valid_2 tooltip', 0).innerHTML = "!<span class='tooltiptext'>"+login_message['isPassValid']+"</span>";				
+				login_valid['password'] = false;
+			}else {
+				$('valid valid_2 tooltip', 0).style.color = "#00ff00";
+				$('valid valid_2 tooltip', 0).innerHTML = '☑';
+				login_valid['password'] = true;
 			}
 			CallBack('logbtn');
 		},  true);
@@ -241,7 +259,7 @@ if (isset($_SESSION['username'])) {
 			}
 			CallBackUp('upbtn');
 		},  true);
-	_('scpw').addEventListener('blur', 
+	_('scpw').addEventListener('keyup', 
 		function (){
 			if (!this.value > 0) {
 				$('valid valid_6 tooltip', 0).style.color = "#ff0000";
@@ -258,6 +276,7 @@ if (isset($_SESSION['username'])) {
 				CallBackUp('upbtn');
 			}
 		},  true);
+		
 </script>
 </body>
 </html>
