@@ -18,7 +18,7 @@ if ($_SESSION['banned'] == 'banned_user') {
 // definition of DB connection
 define('DB_HOST', 'localhost');
 define('DB_PORT', '5432');
-define('DB_PASSWD', 'your_db_password');
+define('DB_PASSWD', 'my_password');
 define('DB_USER', 'postgres');
 define('DB_NAME', 'dothat');
 
@@ -133,6 +133,8 @@ if (isset($_POST['signup'])) {
 	}
 	if ($password_1 != $password_2) {
 		$errors['up']['password'] = "The two passwords do not match";
+		$_SESSION['error_list'] = $errors['up'];
+		header('location: /');
 	}
 	if (array_values($errors['up']) != null) {
 		$hash_uname = enc($username);

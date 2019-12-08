@@ -9,8 +9,6 @@ if (isset($_GET['logout'])) {
 }
 define(GOLDEN_GATE, $_SESSION['username']);
 
-$pic = array('data/image/lena.jpg', 'data/image/lena.jpg', 'data/image/shh.jpg', 'data/image/sdp.jpg', 'data/image/ddt.jpg', 'data/image/kuku.jpg');
-
 function resize_image($file, $percent) {
 	$filename = $file;
 	$percent = $percent;
@@ -22,8 +20,9 @@ function resize_image($file, $percent) {
 	imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 	ob_start();
 	imagejpeg($image_p, null, 50);
-	printf('src="data:image/jpeg;base64,%s"', base64_encode(ob_get_clean()));
+	$r = 'src="data:image/jpeg;base64,'.base64_encode(ob_get_clean()).'"';
 	imagedestroy($image_p);
+	return $r;
 }
 ?>
 
@@ -55,7 +54,7 @@ function resize_image($file, $percent) {
 		</div>		
 		<div class="flex_row_center">
 			<div id="bb" class="flex_row_space_between">
-				<img id="avatar" <?php resize_image($pic[0], 0.5);?> class="avatar">
+				<img id="avatar" <?php echo resize_image('data/image/lena.jpg', 0.2); ?> class="avatar">
 				<div id="desktop_menu" class="blue_button" onmouseover="dropdownon()" onclick="dropdown()">
 					<p id="username"><?php echo GOLDEN_GATE; ?></p>
 					<div id="drop_menu" onmouseout="undropdown()">
@@ -77,42 +76,20 @@ function resize_image($file, $percent) {
 <content onclick="undropdown()">
 	<div id="content" class="container">
 		<div id="content_left" class="">
-			<div class="post">
-				<div class="poster_info flex_midle_center">
-					<img <?php resize_image($pic[1], 0.2);?> class="avatar">
-					<div class="avatar_info"><b>Lena</b> @Lena_d</div>
-				</div>
-				<a class="post_content" href="">
-					<div class="media flex_col_center"><img <?php resize_image($pic[2], 0.2);?> loading='lazy' /></div>
-					<div class="post_title">The Modern Lord of Dance</div>
-					<div class="post_text">
-					As the choreographer of the video for Sia's "Chandelier," FKA Twigs's Apple commercial, the Five Movements in 'The OA,' and, most recently, the musical finale of 'Transparent,' Ryan Heffington
-					</div>
-				</a>				
-				<div class="stat flex_midle_center">
-					<div class="likes flex_row_center">
-						<svg viewBox="0 0 35 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.1695 24.417V14.5376C12.1695 13.368 13.1738 12.4592 14.3399 12.3689C14.9577 12.3211 15.5842 12.2183 16.0337 12.014L18.8441 5.69075C18.8441 3.93432 18.8441 0.964311 20.2492 1.47525C25.5186 3.39126 22.7083 12.3653 22.7083 12.3653H31.8419C33.9496 12.3653 34.6522 16.2295 31.8419 16.2295C31.8419 16.2295 33.9496 19.7424 30.0854 19.7424C30.0854 19.7424 32.1931 22.9041 29.0315 22.9041C29.0315 22.9041 31.8419 26.0657 26.9238 26.417H14.1695C13.0649 26.417 12.1695 25.5216 12.1695 24.417Z"  stroke-width="2"/><path d="M3.5 12.3653H7.35917C8.46374 12.3653 9.35917 13.2607 9.35917 14.3653V24.417C9.35917 25.5216 8.46374 26.417 7.35917 26.417H3.5C2.39543 26.417 1.5 25.5216 1.5 24.417V14.3653C1.5 13.2607 2.39543 12.3653 3.5 12.3653Z" stroke-width="2"/></svg>
-						<div class="likes_count">25.k</div>
-					</div>
-					<div class="comments flex_row_center">
-						<svg viewBox="0 0 33 29" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M30.2212 1H2.23037C1.55085 1 1 1.72212 1 2.6129V17.129C1 18.0198 1.55085 18.7419 2.23037 18.7419H4.38351V26L10.2278 18.7419H30.2212C30.9008 18.7419 31.4516 18.0198 31.4516 17.129V2.6129C31.4516 1.72212 30.9008 1 30.2212 1Z"  stroke-width="2"/></svg>
-						<div class="comments_count">123.k</div>
-					</div>
-				</div>
-			</div>
+			<div id="loader">loading...</div>
 		</div>
 		<div id="content_right" class="">
 			<div class="groups">
 				<div class="titles">Recomended groups</div>
 				<div class="flex_midle_center  grp">
-					<img class="avatar" <?php resize_image("data/image/univ.jpg", 0.1);?> >
+					<img class="avatar" <?php echo resize_image('data/image/univ.jpg', 0.2); ?> >
 					<div class="group_name">Kristmas Party</div>
 				</div>
 			</div>
 			<div class="groups">
-				<div class="titles">Popular groups</div>
+				<div class="titles">My groups</div>
 				<div class="flex_midle_center  grp">
-					<img class="avatar" <?php resize_image("data/image/univ.jpg", 0.1);?>>
+					<img class="avatar" <?php echo resize_image('data/image/lena.jpg', 0.2); ?>>
 					<div class="group_name">Kristmas Party</div>
 				</div>
 			</div>
@@ -146,25 +123,28 @@ function resize_image($file, $percent) {
 			}
 		}
 	}
-	function checkEmail(e) {
-		var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
-		return filter.test(e);
+	function randomint(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
-	function Check() {
-		var err = checkEmail(_('email').value);
-		console.log(err);		
+	window.onload = function () {
+		var ajax = new XMLHttpRequest();
+		ajax.responseType = 'json';
+		ajax.open('GET', 'dir.php?img&user=<?php echo $_SESSION["username"]; ?>', true);
+		ajax.send();
+		ajax.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+				var array = this.response;
+				for (var i = array.length - 1; i >= 0; i--) {
+					var post = '<div class="post"><div class="poster_info flex_midle_center"><img '+array[randomint(0, array.length-1)]+' class="avatar"><div class="avatar_info"><b>Name</b> @username</div></div><a class="post_content" href=""><div class="media flex_col_center"><img '+array[i]+' loading="lazy" /></div><div class="post_title">The Modern Lord of Dance</div><div class="post_text">As the choreographer of the video for Sia`s "Chandelier," FKA Twigs`s Apple commercial, the Five Movements in The OA,` and, most recently, the musical finale of `Transparent,` Ryan Heffington</div></a><div class="stat flex_midle_center"><div class="likes flex_row_center"><svg viewBox="0 0 35 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.1695 24.417V14.5376C12.1695 13.368 13.1738 12.4592 14.3399 12.3689C14.9577 12.3211 15.5842 12.2183 16.0337 12.014L18.8441 5.69075C18.8441 3.93432 18.8441 0.964311 20.2492 1.47525C25.5186 3.39126 22.7083 12.3653 22.7083 12.3653H31.8419C33.9496 12.3653 34.6522 16.2295 31.8419 16.2295C31.8419 16.2295 33.9496 19.7424 30.0854 19.7424C30.0854 19.7424 32.1931 22.9041 29.0315 22.9041C29.0315 22.9041 31.8419 26.0657 26.9238 26.417H14.1695C13.0649 26.417 12.1695 25.5216 12.1695 24.417Z"  stroke-width="2"/><path d="M3.5 12.3653H7.35917C8.46374 12.3653 9.35917 13.2607 9.35917 14.3653V24.417C9.35917 25.5216 8.46374 26.417 7.35917 26.417H3.5C2.39543 26.417 1.5 25.5216 1.5 24.417V14.3653C1.5 13.2607 2.39543 12.3653 3.5 12.3653Z" stroke-width="2"/></svg><div class="likes_count">25.k</div></div><div class="comments flex_row_center"><svg viewBox="0 0 33 29" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M30.2212 1H2.23037C1.55085 1 1 1.72212 1 2.6129V17.129C1 18.0198 1.55085 18.7419 2.23037 18.7419H4.38351V26L10.2278 18.7419H30.2212C30.9008 18.7419 31.4516 18.0198 31.4516 17.129V2.6129C31.4516 1.72212 30.9008 1 30.2212 1Z"  stroke-width="2"/></svg><div class="comments_count">123.k</div></div></div></div>';
+					_('content_left').insertAdjacentHTML('afterbegin', post);
+				}
+				_('loader').innerHTML = 'No more load.';
+			}
+		}
 	}
-	window.onload = function() {
-		var gg = _('goldendate').value;
-	}
-
 </script>
 </body>
 </html>
 
-
-<!-- 
-?a=" in (toString=alert.window%2b")/
-
-?a " in (getString (/[^\n](a+)+/))"
--->
