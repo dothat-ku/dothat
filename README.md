@@ -1,22 +1,6 @@
 <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"> 
-<style>
-.flex_row_center {
-	display: flex;
-	-ms-flex-direction: row;
-	-o-flex-direction: row;
-	-webkit-flex-direction: row;
-	flex-direction: row;
-	align-items: center;
-	-o-align-items: center;
-	-ms-align-items: center;
-	-webkit-align-items: center;
-	-ms-justify-content: center !important;
-	-webkit-justify-content: center !important;
-	-o-justify-content: center !important;
-	justify-content: center !important;
-}
 </style>
-<div class="flex_row_center">
+<div style='display: flex; -ms-flex-direction: row; -o-flex-direction: row; -webkit-flex-direction: row; flex-direction: row; align-items: center; -o-align-items: center; -ms-align-items: center; -webkit-align-items: center; -ms-justify-content: center !important; -webkit-justify-content: center !important; -o-justify-content: center !important; 	justify-content: center !important;'>
 <img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="170" width="165" >
 
 <span style='font-family: "Righteous"; font-size:2em;'>dothat_KU(COSE451-00)</span>
@@ -79,7 +63,7 @@ sudo nano /etc/nginx/site-available/default
 index index.php index.html index.htm index.nginx-debian.html;
 ```
 
-* uncomment the following lines from the file and check and change php version in line ```/run/php/php7.0-fpm.sock```
+* uncomment the following lines from the file
 ```sh
 location ~ \.php$ {
 		include snippets/fastcgi-php.conf;
@@ -103,7 +87,7 @@ server {
 	listen [::]:443 ssl default_server;	
 	include snippets/snakeoil.conf;
 
-	root /home/john/dothat-master/dothat/dothat;
+	root /home/john/dothat-master/dothat
 	
 	index index.php index.html index.htm index.nginx-debian.html;
 
