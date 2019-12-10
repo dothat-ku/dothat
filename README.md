@@ -1,12 +1,9 @@
 <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"> 
-</style>
 <div style='display: flex; -ms-flex-direction: row; -o-flex-direction: row; -webkit-flex-direction: row; flex-direction: row; align-items: center; -o-align-items: center; -ms-align-items: center; -webkit-align-items: center; -ms-justify-content: center !important; -webkit-justify-content: center !important; -o-justify-content: center !important; 	justify-content: center !important;'>
 <img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="170" width="165" >
 
 <span style='font-family: "Righteous"; font-size:2em;'>dothat_KU(COSE451-00)</span>
 </div>
-
-</br>
 </br>
 ### Team Members: 
 - Shon 
