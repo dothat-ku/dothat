@@ -1,11 +1,12 @@
-<link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"> 
-<div style='display: flex; -ms-flex-direction: row; -o-flex-direction: row; -webkit-flex-direction: row; flex-direction: row; align-items: center; -o-align-items: center; -ms-align-items: center; -webkit-align-items: center; -ms-justify-content: center !important; -webkit-justify-content: center !important; -o-justify-content: center !important; 	justify-content: center !important;'>
-<img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="170" width="165" >
+<img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="130" width="130" >
 
-<span style="@font-face {font-family: 'right'; src: url('Righteous/Righteous-Regular.ttf') format('truetype');} font-family: 'right">dothat_KU(COSE451-00)</span>
-</div>
 </br>
-### Team Members: 
+
+# **dothat_KU(COSE451-00)**
+
+</br></br>
+
+### **Team Members:**
 - Shon 
 - Yun
 - Joey
