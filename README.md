@@ -79,7 +79,7 @@ sudo nano /etc/nginx/site-available/default
 index index.php index.html index.htm index.nginx-debian.html;
 ```
 
-* uncomment the following lines from the file
+* uncomment the following lines from the file and check and change php version in line ```/run/php/php7.0-fpm.sock```
 ```sh
 location ~ \.php$ {
 		include snippets/fastcgi-php.conf;
@@ -103,7 +103,7 @@ server {
 	listen [::]:443 ssl default_server;	
 	include snippets/snakeoil.conf;
 
-	root /home/john/dothat-master/dothat
+	root /home/john/dothat-master/dothat/dothat;
 	
 	index index.php index.html index.htm index.nginx-debian.html;
 
