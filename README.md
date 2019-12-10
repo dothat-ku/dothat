@@ -1,7 +1,29 @@
-<img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="230" width="230" >
+<link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"> 
+<style>
+.flex_row_center {
+	display: flex;
+	-ms-flex-direction: row;
+	-o-flex-direction: row;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	align-items: center;
+	-o-align-items: center;
+	-ms-align-items: center;
+	-webkit-align-items: center;
+	-ms-justify-content: center !important;
+	-webkit-justify-content: center !important;
+	-o-justify-content: center !important;
+	justify-content: center !important;
+}
+</style>
+<div class="flex_row_center">
+<img src="https://avatars1.githubusercontent.com/u/57694591?s=460&v=4" align="left" height="170" width="165" >
 
-# dothat@KU (COSE451)
+<span style='font-family: "Righteous"; font-size:2em;'>dothat_KU(COSE451-00)</span>
+</div>
 
+</br>
+</br>
 ### Team Members: 
 - Shon 
 - Yun
@@ -10,15 +32,15 @@
 
 -----
 
-## Requirement
-- Nginx
-- PHP
-- Postgresql
+# Requirement
+- **PHP** (7.0 or above)
+- **Postgresql**
+- Nginx (optional)
 
-## Operating Systems
-- Linux Ubuntu (recommended)
+# Operating Systems
+- Linux Ubuntu (recommended * (16.04 or above))
 
-## Installitions
+# Installitions
 
 * type in terminal
 
@@ -27,7 +49,7 @@ $ sudo apt-get update
 ```
 
 ----
-# Installing Nginx
+## Installing Nginx (optional)
 ```sh
 $ sudo apt-get install nginx-full
 ```
@@ -38,7 +60,7 @@ $ sudo service nginx start | restart | reload | stop | status
 ```
 
 ---- 
-# Installing PHP
+## Installing PHP*
 ```sh
 $ sudo apt-get install php-fpm php-pgsql php-mysql
 ```
@@ -47,7 +69,7 @@ $ sudo apt-get install php-fpm php-pgsql php-mysql
 ```sh
 $ sudo apt-get install php
 ```
-#### Configure Nginx to Use the PHP Processor
+### Configure Nginx to Use the PHP Processor
 * Open the Nginx default server block by typing the below command in the terminal
 ```sh
 sudo nano /etc/nginx/site-available/default
@@ -118,7 +140,7 @@ $ sudo service nginx restart
 ```
 
 ----
-# Installing Postgresql
+## Installing Postgresql*
 ```sh
 $ sudo apt-get install postgresql postgresql-contrib
 ```
@@ -162,7 +184,7 @@ sudo nano /etc/postgresql/10/main/pg_hba.conf
 sudo service postgresql restart
 ```
 
-#### Changing Password
+#### Changing Password*
 * With an extablished connection to Postgres, issue to ```ALTER USER``` command to change the password for the ```postgres``` user
 ```sh
 postgres=# ALTER USER postgres PASSWORD 'myPassword';
@@ -182,7 +204,7 @@ Type "help" for help.
 ```
 
 
-#### Creating Database
+## Creating Database*
 * To create database
 ```sh
 CREATE DATABASE dothat;
@@ -202,7 +224,7 @@ This will makes easy connection with web application.
 
 ----
 
-# Connection : dothat &rightarrow; postgreSQL
+## Connection : dothat &rightarrow; postgreSQL*
 
 - Change database password configuration in project ```dothat/load.php ```  where ```'your_db_password' to your current postgres``` to your current postgres password. Open file ```load.php``` with any text editor.
 ```php
@@ -216,8 +238,13 @@ define(DB_NAME, 'dothat');
 
 -----
 
-# Usage
-* Open your browser and type ```localhost``` or ```127.0.0.0.1``` 
+# Usage :
 
+### options :
+
+* If `nginx` successfuly installed useage :  open your browser and type ```localhost``` or ```127.0.0.0.1```
+
+* Otherwise go to the folder of `cloned_project_folder/dothat/dothat/` and open terminal by **right click  &rightarrow; Open in Terminal** and type `php -S localhost:7654` and open your browser and type ```localhost:7654``` or ```127.0.0.0.1:7654```
+ 
 -----
 
