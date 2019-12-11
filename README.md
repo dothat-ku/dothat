@@ -226,7 +226,7 @@ define(DB_NAME, 'dothat');
 
 * If `nginx` successfuly installed useage :  open your browser and type ```localhost``` or ```127.0.0.0.1```
 
-* Otherwise go to the folder of `cloned_project_folder/dothat/dothat/` and open terminal by **right click  &rightarrow; Open in Terminal** and type `php -S localhost:7654` and open your browser and type ```localhost:7654``` or ```127.0.0.0.1:7654```
+* Otherwise go to the folder of `cloned_project_folder/dothat/dothat/` and open terminal by **right click  &rightarrow; Open in Terminal** and type `php -S localhost:7654` and open your browser and type ```localhost:7654``` or ```127.0.0.0.1:7654``` **(In this case system not support request handler in most of attack  techniques)**
  
 -----
 
