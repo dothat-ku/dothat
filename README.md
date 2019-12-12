@@ -61,7 +61,9 @@ sudo nano /etc/nginx/site-available/default
 index index.php index.html index.htm index.nginx-debian.html;
 ```
 
-* uncomment the following lines from the file
+* Uncomment the following lines from the file 
+* Make sure give file in line `snippets/fastcgi-php.conf;` exist in folder by `ls -l /etc/nginx/snippets/`
+* Check and change given file version in line `fastcgi_pass unix:/run/php/php7.0-fpm.sock;` where you installed version of `php` in folder `/run/php/`, to check in terminal by `ls -l /run/php/` output should be something like `php{version}-fpm.sock`
 ```sh
 location ~ \.php$ {
 		include snippets/fastcgi-php.conf;
@@ -73,7 +75,7 @@ location ~ \.php$ {
 		deny all;
 ```
 
-* Change the root to make a path to your dothat folder: ```root /path/to/the/clone/folder/of/dothat;```
+* Change the root to make a path to your dothat folder: `root /path/to/the/cloned/folder/dothat/dothat;`
 * Your file should look something like this at the end
 ```sh
 server {
@@ -85,7 +87,7 @@ server {
 	listen [::]:443 ssl default_server;	
 	include snippets/snakeoil.conf;
 
-	root /home/john/dothat-master/dothat
+	root /path/to/the/cloned/folder/dothat/dothat
 	
 	index index.php index.html index.htm index.nginx-debian.html;
 
@@ -226,7 +228,7 @@ define(DB_NAME, 'dothat');
 
 * If `nginx` successfuly installed useage :  open your browser and type ```localhost``` or ```127.0.0.0.1```
 
-* Otherwise go to the folder of `cloned_project_folder/dothat/dothat/` and open terminal by **right click  &rightarrow; Open in Terminal** and type `php -S localhost:7654` and open your browser and type ```localhost:7654``` or ```127.0.0.0.1:7654``` **(In this case system not support request handler in most of attack  techniques)**
+* Otherwise go to the folder of `cloned_project_folder/dothat/dothat/` and open terminal by **right click  &rightarrow; Open in Terminal** and type `php -S localhost:7654` (port `:7654` is optional) and open your browser and type ```localhost:7654``` or ```127.0.0.0.1:7654``` **(In this case system not support request handler in most of attack  techniques)**
  
 -----
 
